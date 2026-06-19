@@ -303,12 +303,16 @@ body.light .clc-meta{color:rgba(0,0,0,.2)}
   border-radius:0 0 60% 60%;pointer-events:none}
 .result-glass.sr-failed{border-color:rgba(255,59,48,.28);background:rgba(255,30,20,.06)}
 .result-glass.sr-failed::before{background:linear-gradient(180deg,rgba(255,59,48,.07) 0%,transparent 100%)}
+.result-glass.r-3star{border-color:rgba(255,214,10,.32);background:rgba(255,214,10,.05)}
+.result-glass.r-3star::before{background:linear-gradient(180deg,rgba(255,214,10,.1) 0%,transparent 100%)}
+.result-glass.r-2star{border-color:rgba(0,122,255,.28);background:rgba(0,122,255,.05)}
+.result-glass.r-2star::before{background:linear-gradient(180deg,rgba(0,122,255,.08) 0%,transparent 100%)}
 .result-level{font-size:.65rem;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.3);position:relative}
 .result-title{font-size:1.7rem;font-weight:800;color:#fff;letter-spacing:-1px;position:relative}
 .result-stars{display:flex;gap:8px;margin:8px 0;position:relative}
 @keyframes starPop{0%{transform:scale(0) rotate(-30deg);opacity:0}
   60%{transform:scale(1.3) rotate(5deg)}100%{transform:scale(1) rotate(0);opacity:1}}
-.star-icon{font-size:2.2rem;opacity:0;display:inline-block}
+.star-icon{font-size:3rem;opacity:0;display:inline-block}
 .star-icon.earned{-webkit-animation:starPop .5s cubic-bezier(.34,1.56,.64,1) forwards;
   animation:starPop .5s cubic-bezier(.34,1.56,.64,1) forwards}
 .star-icon:nth-child(1){animation-delay:.1s}
@@ -316,8 +320,8 @@ body.light .clc-meta{color:rgba(0,0,0,.2)}
 .star-icon:nth-child(3){animation-delay:.5s}
 .result-stats{font-size:.8rem;color:rgba(255,255,255,.4);text-align:center;position:relative;line-height:1.7}
 .result-stats b{color:rgba(255,255,255,.7)}
-.result-quote{font-size:.72rem;color:rgba(255,255,255,.28);text-align:center;font-style:italic;
-  line-height:1.5;padding:0 8px;position:relative;letter-spacing:.1px}
+.result-quote{font-size:.85rem;color:rgba(255,255,255,.52);text-align:center;
+  line-height:1.55;padding:4px 4px 0;position:relative;letter-spacing:.05px}
 .sr-fail-notice{padding:5px 14px;border-radius:100px;background:rgba(255,59,48,.1);
   border:1px solid rgba(255,59,48,.22);color:rgba(255,85,75,.65);
   font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;position:relative}
@@ -1510,7 +1514,9 @@ function showResult(idx, stars, statsHtml, success){
   else title = stars===3 ? 'Perfect!' : stars===2 ? 'Great!' : 'Completed';
 
   const glass = document.querySelector('#s-result .result-glass');
-  glass.classList.remove('sr-failed');
+  glass.classList.remove('sr-failed','r-3star','r-2star');
+  if(stars===3) glass.classList.add('r-3star');
+  else if(stars===2) glass.classList.add('r-2star');
   document.getElementById('sr-fail-notice').style.display='none';
 
   document.getElementById('rlevel').textContent = typeLabel;
