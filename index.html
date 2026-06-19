@@ -320,8 +320,8 @@ body.light .clc-meta{color:rgba(0,0,0,.2)}
 .star-icon:nth-child(3){animation-delay:.5s}
 .result-stats{font-size:.8rem;color:rgba(255,255,255,.4);text-align:center;position:relative;line-height:1.7}
 .result-stats b{color:rgba(255,255,255,.7)}
-.result-quote{font-size:.85rem;color:rgba(255,255,255,.52);text-align:center;
-  line-height:1.55;padding:4px 4px 0;position:relative;letter-spacing:.05px}
+.result-quote{font-size:.92rem;color:rgba(255,255,255,.72);text-align:center;
+  line-height:1.55;padding:6px 0 0;position:relative;letter-spacing:.05px}
 .sr-fail-notice{padding:5px 14px;border-radius:100px;background:rgba(255,59,48,.1);
   border:1px solid rgba(255,59,48,.22);color:rgba(255,85,75,.65);
   font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;position:relative}
@@ -508,7 +508,10 @@ const _sfxUrls = {
   done:'sounds/level tamamlandı.mp3', unlock:"sounds/yeni challange'ın kilidi açıldı.mp3"
 };
 Object.entries(_sfxUrls).forEach(([k,url])=>{
-  fetch(url).then(r=>r.arrayBuffer()).then(b=>_ac.decodeAudioData(b,buf=>{SFX[k]=buf}));
+  fetch(url)
+    .then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer()})
+    .then(b=>_ac.decodeAudioData(b,buf=>{SFX[k]=buf},e=>console.error('decode',k,e)))
+    .catch(e=>console.error('fetch',k,e));
 });
 document.addEventListener('touchstart',()=>{if(_ac.state==='suspended')_ac.resume()},{once:true});
 document.addEventListener('mousedown', ()=>{if(_ac.state==='suspended')_ac.resume()},{once:true});
