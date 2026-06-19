@@ -1222,12 +1222,12 @@ function offerAnToken(){
   const useBtn=document.getElementById('an-use-btn');
 
   if(AN<=0){
-    titleEl.textContent='An Kalmadı';
+    titleEl.textContent='Out of Sand';
     bonusEl.style.display='none';
     remainEl.style.display='none';
     refillEl.style.display='block';
     document.getElementById('an-refill-time').textContent=formatRefillTime();
-    useBtn.textContent='Satın Al';
+    useBtn.textContent='Buy More';
     useBtn.style.opacity='.45';
     useBtn.style.pointerEvents='none'; // placeholder — RevenueCat gelince açılacak
     clearInterval(_overlayRefillInterval);
@@ -1242,12 +1242,12 @@ function offerAnToken(){
       }
     },1000);
   } else {
-    titleEl.textContent='Süre Doldu';
-    bonusEl.textContent=`+${bonus}sn`;
+    titleEl.textContent="Time's Up";
+    bonusEl.textContent=`+${bonus}s`;
     bonusEl.style.display='';
     remainEl.style.display='';
     refillEl.style.display='none';
-    useBtn.textContent='An Kullan';
+    useBtn.textContent='Use Sand';
     useBtn.style.opacity='';
     useBtn.style.pointerEvents='';
   }
@@ -1692,16 +1692,16 @@ function hideCredits(){document.getElementById('credits-modal').style.display='n
 <div id="an-overlay">
   <div class="an-card">
     <div class="an-card-icon"><i class="ph ph-hourglass-low ph-bold"></i></div>
-    <div class="an-card-title" id="an-card-title">Süre Doldu</div>
-    <div class="an-card-bonus" id="an-overlay-bonus">+30sn</div>
-    <div class="an-card-remaining" id="an-overlay-remaining">Kalan: <b id="an-overlay-count">3</b> An</div>
+    <div class="an-card-title" id="an-card-title">Time's Up</div>
+    <div class="an-card-bonus" id="an-overlay-bonus">+30s</div>
+    <div class="an-card-remaining" id="an-overlay-remaining"><b id="an-overlay-count">3</b> Sand left</div>
     <div id="an-overlay-refill" style="display:none;text-align:center">
       <div class="an-refill-time" id="an-refill-time">06:00:00</div>
-      <div class="an-refill-label">süre sonra yenilenir</div>
+      <div class="an-refill-label">until refill</div>
     </div>
     <div class="an-btns">
-      <button class="an-use-btn" id="an-use-btn" onclick="useAn()">An Kullan</button>
-      <button class="an-skip-btn" onclick="declineAn()">Bırak</button>
+      <button class="an-use-btn" id="an-use-btn" onclick="useAn()">Use Sand</button>
+      <button class="an-skip-btn" onclick="declineAn()">Give Up</button>
     </div>
   </div>
 </div>
