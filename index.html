@@ -316,6 +316,8 @@ body.light .clc-meta{color:rgba(0,0,0,.2)}
 .star-icon:nth-child(3){animation-delay:.5s}
 .result-stats{font-size:.8rem;color:rgba(255,255,255,.4);text-align:center;position:relative;line-height:1.7}
 .result-stats b{color:rgba(255,255,255,.7)}
+.result-quote{font-size:.72rem;color:rgba(255,255,255,.28);text-align:center;font-style:italic;
+  line-height:1.5;padding:0 8px;position:relative;letter-spacing:.1px}
 .sr-fail-notice{padding:5px 14px;border-radius:100px;background:rgba(255,59,48,.1);
   border:1px solid rgba(255,59,48,.22);color:rgba(255,85,75,.65);
   font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;position:relative}
@@ -428,6 +430,7 @@ body.light .clc-meta{color:rgba(0,0,0,.2)}
         <span class="star-icon" id="st3">⭐</span>
       </div>
       <div class="result-stats" id="rstats"></div>
+      <div class="result-quote" id="rquote"></div>
       <div id="sr-fail-notice" class="sr-fail-notice" style="display:none">⚡ Speed bonus lost</div>
       <div class="result-btns">
         <button class="rbtn secondary" id="rbtn-retry">Retry</button>
@@ -653,6 +656,72 @@ function isUnlocked(i){
   return chapterOpen&&progress.slice(ch*10,ch*10+9).every(s=>s>=1);
 }
 function totalStars(){return progress.reduce((a,b)=>a+b,0)}
+
+/* ── Motivation Messages ── */
+const _MSG = {
+  3:[
+    "Your brain just beat its own autopilot.",
+    "Inhibitory control: maximized.",
+    "The Stroop effect didn't stand a chance.",
+    "Color said one thing. You chose another. Flawless.",
+    "Peak selective attention. That's rare.",
+    "Your prefrontal cortex is running hot.",
+    "Interference: blocked. Memory: sharp.",
+    "Processing speed and recall — both firing.",
+    "That's what trained attention looks like.",
+    "Every synapse earned that.",
+    "Automaticity, defeated. Again.",
+    "Cognitive control at its finest.",
+  ],
+  2:[
+    "Solid. Your brain knows the way — keep sharpening it.",
+    "Good recall. Your inhibition is catching up.",
+    "Close to perfect. The gap is getting smaller.",
+    "Two stars means you're in the game. Three means mastery.",
+    "Your attention is there. Speed it up.",
+    "Strong foundation. The ceiling is one level up.",
+    "The interference slowed you down. Less next time.",
+    "Competent and improving. That's the trajectory.",
+    "Good. Now do it without thinking.",
+    "Almost automatic. Not quite. Keep going.",
+  ],
+  1:[
+    "You finished. That's where progress starts.",
+    "Completed. The brain logged every move.",
+    "One star is one more than zero.",
+    "Crossed the line. Now move it further.",
+    "Done. Your brain is already recalibrating.",
+    "The Stroop effect is hard. You got through it.",
+    "Finished under pressure. That counts.",
+    "Every completion is a new baseline.",
+    "It wasn't clean. It was real. Good enough to build on.",
+    "You pushed through. That's the whole point.",
+  ],
+  0:[
+    "Interference wins sometimes. Less often with practice.",
+    "The pattern is in there. Your brain is still finding it.",
+    "Struggle is the signal. You're learning.",
+    "Even trained minds slip. Untrained ones don't notice.",
+    "Not stuck — just loading.",
+    "Reset. The colors will make more sense next time.",
+    "Friction creates growth. You just felt both.",
+    "The Stroop effect is real. So is recovery.",
+  ],
+};
+const _msgDecks = {};
+const _msgIdx   = {};
+[0,1,2,3].forEach(s=>{
+  _msgDecks[s] = [..._MSG[s]].sort(()=>Math.random()-.5);
+  _msgIdx[s]   = 0;
+});
+function getMotivationMsg(stars){
+  const k = Math.min(Math.max(stars,0),3);
+  const deck = _msgDecks[k];
+  const msg  = deck[_msgIdx[k]];
+  _msgIdx[k] = (_msgIdx[k]+1) % deck.length;
+  if(_msgIdx[k]===0) _msgDecks[k].sort(()=>Math.random()-.5);
+  return msg;
+}
 
 /* ── An Token ── */
 const AN_BONUS = [30, 25, 20, 15, 10]; // bonus seconds per chapter (Ch1→Ch5)
@@ -1447,6 +1516,7 @@ function showResult(idx, stars, statsHtml, success){
   document.getElementById('rlevel').textContent = typeLabel;
   document.getElementById('rtitle').textContent = title;
   document.getElementById('rstats').innerHTML = statsHtml;
+  document.getElementById('rquote').textContent = getMotivationMsg(stars);
 
   document.getElementById('rbtn-retry').onclick=()=>startLevel(idx);
   const nextIdx = idx+1;
